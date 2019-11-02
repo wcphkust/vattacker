@@ -8,7 +8,7 @@ B_DECR = -0.293
 C_INCR = 0.733
 N_SCALAR = -0.74
 
-project_rootpath = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+project_rootpath = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../"))
 project_resourcepath = os.path.join(project_rootpath, "resource/")
 
 NEGATE = \
