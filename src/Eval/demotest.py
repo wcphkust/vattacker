@@ -1,6 +1,3 @@
-import sys, os
-sys.path.append("..")
-sys.path.extend([os.path.join(root, name) for root, dirs, _ in os.walk("../") for name in dirs])
 import requests
 import json
 from Utils.IO import *

@@ -1,11 +1,9 @@
-import os
-import math
-import string
-import requests
-import codecs
-import json
-from inspect import getsourcefile
+import sys
 from Eval.demotest import *
+from Eval.singletest import *
 
 if __name__ == '__main__':
-    demotest()
+    if ("-single" in sys.argv):
+        singletest(sys.argv[sys.argv.index("-single") + 1])
+    elif ("-demo" in sys.argv):
+        demotest()
