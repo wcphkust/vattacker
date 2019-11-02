@@ -2,7 +2,7 @@ import os
 import math
 import codecs
 from inspect import getsourcefile
-from Engine.SentiText import *
+from Utils.SentiText import *
 from Utils.setting import *
 
 class SentimentIntensityAnalyzer(object):
@@ -119,7 +119,7 @@ class SentimentIntensityAnalyzer(object):
                 # (excluding the ones that immediately preceed the item) based
                 # on their distance from the current item.
                 if i > start_i and words_and_emoticons[i - (start_i + 1)].lower() not in self.lexicon:
-                    s = scalar_inc_dec(words_and_emoticons[i - (start_i + 1)], valence, is_cap_diff)
+                    s = self.scalar_inc_dec(words_and_emoticons[i - (start_i + 1)], valence, is_cap_diff)
                     if start_i == 1 and s != 0:
                         s = s * 0.95
                     if start_i == 2 and s != 0:
@@ -143,6 +143,171 @@ class SentimentIntensityAnalyzer(object):
                 and words_and_emoticons[i - 1].lower() == "least":
             valence = valence * N_SCALAR
         return valence
+
+    def _negation_check(self, valence, words_and_emoticons, start_i, i):
+        words_and_emoticons_lower = [str(w).lower() for w in words_and_emoticons]
+        if start_i == 0:
+            if self.negated([words_and_emoticons_lower[i - (start_i + 1)]]):  # 1 word preceding lexicon word (w/o stopwords)
+                valence = valence * N_SCALAR
+        if start_i == 1:
+            if words_and_emoticons_lower[i - 2] == "never" and \
+                    (words_and_emoticons_lower[i - 1] == "so" or
+                     words_and_emoticons_lower[i - 1] == "this"):
+                valence = valence * 1.25
+            elif words_and_emoticons_lower[i - 2] == "without" and \
+                    words_and_emoticons_lower[i - 1] == "doubt":
+                valence = valence
+            elif self.negated([words_and_emoticons_lower[i - (start_i + 1)]]):  # 2 words preceding the lexicon word position
+                valence = valence * N_SCALAR
+        if start_i == 2:
+            if words_and_emoticons_lower[i - 3] == "never" and \
+                    (words_and_emoticons_lower[i - 2] == "so" or words_and_emoticons_lower[i - 2] == "this") or \
+                    (words_and_emoticons_lower[i - 1] == "so" or words_and_emoticons_lower[i - 1] == "this"):
+                valence = valence * 1.25
+            elif words_and_emoticons_lower[i - 3] == "without" and \
+                    (words_and_emoticons_lower[i - 2] == "doubt" or words_and_emoticons_lower[i - 1] == "doubt"):
+                valence = valence
+            elif self.negated([words_and_emoticons_lower[i - (start_i + 1)]]):  # 3 words preceding the lexicon word position
+                valence = valence * N_SCALAR
+        return valence
+
+    def _punctuation_emphasis(self, text):
+        # add emphasis from exclamation points and question marks
+        ep_amplifier = self._amplify_ep(text)
+        qm_amplifier = self._amplify_qm(text)
+        punct_emph_amplifier = ep_amplifier + qm_amplifier
+        return punct_emph_amplifier
+
+    def normalize(self, score, alpha=15):
+        """
+        Normalize the score to be between -1 and 1 using an alpha that
+        approximates the max expected value
+        """
+        norm_score = score / math.sqrt((score * score) + alpha)
+        if norm_score < -1.0:
+            return -1.0
+        elif norm_score > 1.0:
+            return 1.0
+        else:
+            return norm_score
+
+    def scalar_inc_dec(self, word, valence, is_cap_diff):
+        """
+        Check if the preceding words increase, decrease, or negate/nullify the
+        valence
+        """
+        scalar = 0.0
+        word_lower = word.lower()
+        if word_lower in BOOSTER_DICT:
+            scalar = BOOSTER_DICT[word_lower]
+            if valence < 0:
+                scalar *= -1
+            # check if booster/dampener word is in ALLCAPS (while others aren't)
+            if word.isupper() and is_cap_diff:
+                if valence > 0:
+                    scalar += C_INCR
+                else:
+                    scalar -= C_INCR
+        return scalar
+
+    def negated(self, input_words, include_nt=True):
+        """
+        Determine if input contains negation words
+        """
+        input_words = [str(w).lower() for w in input_words]
+        neg_words = []
+        neg_words.extend(NEGATE)
+        for word in neg_words:
+            if word in input_words:
+                return True
+        if include_nt:
+            for word in input_words:
+                if "n't" in word:
+                    return True
+        '''if "least" in input_words:
+            i = input_words.index("least")
+            if i > 0 and input_words[i - 1] != "at":
+                return True'''
+        return False
+
+    def score_valence(self, sentiments, text):
+        if sentiments:
+            sum_s = float(sum(sentiments))
+            # compute and add emphasis from punctuation in text
+            punct_emph_amplifier = self._punctuation_emphasis(text)
+            if sum_s > 0:
+                sum_s += punct_emph_amplifier
+            elif sum_s < 0:
+                sum_s -= punct_emph_amplifier
+
+            compound = self.normalize(sum_s)
+            # discriminate between positive, negative and neutral sentiment scores
+            pos_sum, neg_sum, neu_count = self._sift_sentiment_scores(sentiments)
+
+            if pos_sum > math.fabs(neg_sum):
+                pos_sum += punct_emph_amplifier
+            elif pos_sum < math.fabs(neg_sum):
+                neg_sum -= punct_emph_amplifier
+
+            total = pos_sum + math.fabs(neg_sum) + neu_count
+            pos = math.fabs(pos_sum / total)
+            neg = math.fabs(neg_sum / total)
+            neu = math.fabs(neu_count / total)
+
+        else:
+            compound = 0.0
+            pos = 0.0
+            neg = 0.0
+            neu = 0.0
+
+        sentiment_dict = \
+            {"neg": round(neg, 3),
+             "neu": round(neu, 3),
+             "pos": round(pos, 3),
+             "compound": round(compound, 4)}
+
+        return sentiment_dict
+
+
+    @staticmethod
+    def _amplify_ep(text):
+        # check for added emphasis resulting from exclamation points (up to 4 of them)
+        ep_count = text.count("!")
+        if ep_count > 4:
+            ep_count = 4
+        # (empirically derived mean sentiment intensity rating increase for
+        # exclamation points)
+        ep_amplifier = ep_count * 0.292
+        return ep_amplifier
+
+    @staticmethod
+    def _amplify_qm(text):
+        # check for added emphasis resulting from question marks (2 or 3+)
+        qm_count = text.count("?")
+        qm_amplifier = 0
+        if qm_count > 1:
+            if qm_count <= 3:
+                # (empirically derived mean sentiment intensity rating increase for
+                # question marks)
+                qm_amplifier = qm_count * 0.18
+            else:
+                qm_amplifier = 0.96
+        return qm_amplifier
+
+    @staticmethod
+    def _sift_sentiment_scores(sentiments):
+        # want separate positive versus negative sentiment scores
+        pos_sum = 0.0
+        neg_sum = 0.0
+        neu_count = 0
+        for sentiment_score in sentiments:
+            if sentiment_score > 0:
+                pos_sum += (float(sentiment_score) + 1)  # compensates for neutral words that are counted as 1
+            if sentiment_score < 0:
+                neg_sum += (float(sentiment_score) - 1)  # when used with math.fabs(), compensates for neutrals
+            if sentiment_score == 0:
+                neu_count += 1
+        return pos_sum, neg_sum, neu_count
 
     @staticmethod
     def _but_check(words_and_emoticons, sentiments):
@@ -212,116 +377,3 @@ class SentimentIntensityAnalyzer(object):
         if len(idioms_valences) > 0:
             valence = sum(idioms_valences) / float(len(idioms_valences))
         return valence
-
-    @staticmethod
-    def _negation_check(valence, words_and_emoticons, start_i, i):
-        words_and_emoticons_lower = [str(w).lower() for w in words_and_emoticons]
-        if start_i == 0:
-            if negated([words_and_emoticons_lower[i - (start_i + 1)]]):  # 1 word preceding lexicon word (w/o stopwords)
-                valence = valence * N_SCALAR
-        if start_i == 1:
-            if words_and_emoticons_lower[i - 2] == "never" and \
-                    (words_and_emoticons_lower[i - 1] == "so" or
-                     words_and_emoticons_lower[i - 1] == "this"):
-                valence = valence * 1.25
-            elif words_and_emoticons_lower[i - 2] == "without" and \
-                    words_and_emoticons_lower[i - 1] == "doubt":
-                valence = valence
-            elif negated([words_and_emoticons_lower[i - (start_i + 1)]]):  # 2 words preceding the lexicon word position
-                valence = valence * N_SCALAR
-        if start_i == 2:
-            if words_and_emoticons_lower[i - 3] == "never" and \
-                    (words_and_emoticons_lower[i - 2] == "so" or words_and_emoticons_lower[i - 2] == "this") or \
-                    (words_and_emoticons_lower[i - 1] == "so" or words_and_emoticons_lower[i - 1] == "this"):
-                valence = valence * 1.25
-            elif words_and_emoticons_lower[i - 3] == "without" and \
-                    (words_and_emoticons_lower[i - 2] == "doubt" or words_and_emoticons_lower[i - 1] == "doubt"):
-                valence = valence
-            elif negated([words_and_emoticons_lower[i - (start_i + 1)]]):  # 3 words preceding the lexicon word position
-                valence = valence * N_SCALAR
-        return valence
-
-    def _punctuation_emphasis(self, text):
-        # add emphasis from exclamation points and question marks
-        ep_amplifier = self._amplify_ep(text)
-        qm_amplifier = self._amplify_qm(text)
-        punct_emph_amplifier = ep_amplifier + qm_amplifier
-        return punct_emph_amplifier
-
-    @staticmethod
-    def _amplify_ep(text):
-        # check for added emphasis resulting from exclamation points (up to 4 of them)
-        ep_count = text.count("!")
-        if ep_count > 4:
-            ep_count = 4
-        # (empirically derived mean sentiment intensity rating increase for
-        # exclamation points)
-        ep_amplifier = ep_count * 0.292
-        return ep_amplifier
-
-    @staticmethod
-    def _amplify_qm(text):
-        # check for added emphasis resulting from question marks (2 or 3+)
-        qm_count = text.count("?")
-        qm_amplifier = 0
-        if qm_count > 1:
-            if qm_count <= 3:
-                # (empirically derived mean sentiment intensity rating increase for
-                # question marks)
-                qm_amplifier = qm_count * 0.18
-            else:
-                qm_amplifier = 0.96
-        return qm_amplifier
-
-    @staticmethod
-    def _sift_sentiment_scores(sentiments):
-        # want separate positive versus negative sentiment scores
-        pos_sum = 0.0
-        neg_sum = 0.0
-        neu_count = 0
-        for sentiment_score in sentiments:
-            if sentiment_score > 0:
-                pos_sum += (float(sentiment_score) + 1)  # compensates for neutral words that are counted as 1
-            if sentiment_score < 0:
-                neg_sum += (float(sentiment_score) - 1)  # when used with math.fabs(), compensates for neutrals
-            if sentiment_score == 0:
-                neu_count += 1
-        return pos_sum, neg_sum, neu_count
-
-    def score_valence(self, sentiments, text):
-        if sentiments:
-            sum_s = float(sum(sentiments))
-            # compute and add emphasis from punctuation in text
-            punct_emph_amplifier = self._punctuation_emphasis(text)
-            if sum_s > 0:
-                sum_s += punct_emph_amplifier
-            elif sum_s < 0:
-                sum_s -= punct_emph_amplifier
-
-            compound = normalize(sum_s)
-            # discriminate between positive, negative and neutral sentiment scores
-            pos_sum, neg_sum, neu_count = self._sift_sentiment_scores(sentiments)
-
-            if pos_sum > math.fabs(neg_sum):
-                pos_sum += punct_emph_amplifier
-            elif pos_sum < math.fabs(neg_sum):
-                neg_sum -= punct_emph_amplifier
-
-            total = pos_sum + math.fabs(neg_sum) + neu_count
-            pos = math.fabs(pos_sum / total)
-            neg = math.fabs(neg_sum / total)
-            neu = math.fabs(neu_count / total)
-
-        else:
-            compound = 0.0
-            pos = 0.0
-            neg = 0.0
-            neu = 0.0
-
-        sentiment_dict = \
-            {"neg": round(neg, 3),
-             "neu": round(neu, 3),
-             "pos": round(pos, 3),
-             "compound": round(compound, 4)}
-
-        return sentiment_dict

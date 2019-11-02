@@ -2,7 +2,7 @@ import requests
 import json
 from Utils.IO import *
 from Utils.setting import *
-from Engine.SentiText import *
+from Utils.SentiText import *
 from Engine.SentimentIntensityAnalyzer import *
 
 def demotest():
