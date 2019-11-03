@@ -1,4 +1,4 @@
-from nltk import *
+import nltk
 
 class Tagger(object):
     """
