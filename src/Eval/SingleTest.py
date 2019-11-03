@@ -1,4 +1,5 @@
 from Engine.SentimentIntensityAnalyzer import *
+from Engine.FuzzAttacker import *
 from Engine.Tagger import *
 from copy import deepcopy
 
@@ -19,11 +20,9 @@ class SingleTest(object):
         tagger = Tagger(self.text)
         print(tagger.pos_tagging())
         print(tagger.punctuation_tagging())
-        print("\n\n Single Test Done!")
-
+        print("\n\n Initial Single Analysis Done!")
 
     def test(self):
         # TODO
-        return None, None
-        # fuzzattacker = FuzzAttacker(self.text)
-        # return fuzzattacker.mutationhistory, fuzzattacker.successfulattack
+        fuzz_attacker = FuzzAttacker(self.text)
+        return fuzz_attacker.mutationhistory, fuzz_attacker.successfulattack

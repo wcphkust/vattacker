@@ -7,11 +7,11 @@ class FuzzAttacker(object):
     The core engine of vattacker
     """
 
-    def __init__(self, text):
+    def __init__(self, text, max_attack_num = 1000):
         self.text = text
+        self.max_attack_num = max_attack_num
         self.mutationhistory = []
         self.successfulattack = None
-
 
     def attack(self):
         """
@@ -26,6 +26,8 @@ class FuzzAttacker(object):
             textmutator = TextMutator(self.text, self.mutationhistory)
             ar = AttackReportor(textmutator.newtext)
             self.mutationhistory.append(deepcopy(ar))
-            if (ar.polarity != prear.polarity):
+            if ar.polarity != prear.polarity:
                 self.successfulattack = deepcopy(ar)
+                break
+            if len(self.mutationhistory) > self.max_attack_num:
                 break
