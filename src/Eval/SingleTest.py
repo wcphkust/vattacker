@@ -13,10 +13,10 @@ class SingleTest(object):
         # TODO
         self.mutationhistory, self.successfulattack = self.test()
         analyzer = SentimentIntensityAnalyzer()
-        vs = analyzer.polarity_scores(text)
+        vs = analyzer.polarity_scores(self.text)
         print("{:-<65} {}".format(text, str(vs)))
 
-        tagger = Tagger(deepcopy(self.text))
+        tagger = Tagger(self.text)
         print(tagger.pos_tagging())
         print("\n\n Single Test Done!")
 

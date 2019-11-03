@@ -7,7 +7,7 @@ class Tagger(object):
 
     def __init__(self, text):
         self.text = text
-        self.tokens = nltk.pos_tag(text)
+        self.tokens = nltk.word_tokenize(text)
         self.pos_tag = None
         self.conjstructure_tag = None
         self.punctuation_tag = None
