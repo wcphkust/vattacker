@@ -1,5 +1,4 @@
 import string
-from Utils.setting import *
 
 class SentiText(object):
     """
@@ -7,7 +6,7 @@ class SentiText(object):
     """
 
     # TODO: Need to define the structure to store the sentiment valence of each (sub)syntax tree
-    
+
     def __init__(self, text):
         if not isinstance(text, str):
             text = str(text).encode('utf-8')

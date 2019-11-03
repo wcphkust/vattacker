@@ -1,9 +1,7 @@
 import requests
 import json
-from Utils.IO import *
-from Utils.setting import *
-from Utils.SentiText import *
 from Engine.SentimentIntensityAnalyzer import *
+from nltk import tokenize
 
 def demotest():
     # --- examples -------
@@ -97,7 +95,6 @@ def demotest():
     print(
         "  -- You could use NLTK to break the paragraph into sentence tokens for VADER, then average the results for the paragraph like this: \n")
     # simple example to tokenize paragraph into sentences for VADER
-    from nltk import tokenize
 
     sentence_list = tokenize.sent_tokenize(paragraph)
     paragraphSentiments = 0.0

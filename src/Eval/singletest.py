@@ -1,12 +1,23 @@
-import requests
-import json
-from Utils.IO import *
-from Utils.setting import *
-from Utils.SentiText import *
 from Engine.SentimentIntensityAnalyzer import *
 
-def singletest(sentence):
-    analyzer = SentimentIntensityAnalyzer()
-    vs = analyzer.polarity_scores(sentence)
-    print("{:-<65} {}".format(sentence, str(vs)))
-    print("\n\n Single Test Done!")
+
+class SingleTest(object):
+    """
+    test single sentence or short paragraph
+    """
+
+    def __init__(self, text):
+        self.text = text
+        # TODO
+        self.mutationhistory, self.successfulattack = self.test()
+        analyzer = SentimentIntensityAnalyzer()
+        vs = analyzer.polarity_scores(text)
+        print("{:-<65} {}".format(text, str(vs)))
+        print("\n\n Single Test Done!")
+
+
+    def test(self):
+        # TODO
+        return None, None
+        # fuzzattacker = FuzzAttacker(self.text)
+        # return fuzzattacker.mutationhistory, fuzzattacker.successfulattack

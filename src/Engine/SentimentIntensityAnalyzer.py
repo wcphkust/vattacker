@@ -1,4 +1,3 @@
-import os
 import math
 import codecs
 from inspect import getsourcefile
