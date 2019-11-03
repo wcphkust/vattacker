@@ -12,7 +12,6 @@ class AttackReportor(object):
         """
         self.text = text
         self.result, self.polarity = self.fetch_report()
-        self.polarity = None
 
     def fetch_report(self):
         """
