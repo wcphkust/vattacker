@@ -1,5 +1,5 @@
 from copy import deepcopy
-from Eval.SingleTest1 import *
+from Eval.SingleTest import *
 
 class BatchTest(object):
     """
