@@ -26,7 +26,8 @@ class FuzzAttacker(object):
             prear = deepcopy(ar)
             textmutator = TextMutator(self.text, self.mutationhistory)
             ar = AttackReportor(textmutator.newtext)
-            print(str(len(self.mutationhistory)) + str(ar.result))
+            print(str(len(self.mutationhistory)) + " " + str(ar.text) + " " + str(ar.polarity))
+            print(str(ar.result))
             self.mutationhistory.append(deepcopy(ar))
             if ar.polarity != prear.polarity:
                 self.successfulattack = deepcopy(ar)
