@@ -1,4 +1,5 @@
 from random import random
+from math import floor
 import nltk
 
 class TextMutator(object):
@@ -23,4 +24,4 @@ class TextMutator(object):
         """
         # TODO
         tokens = nltk.word_tokenize(self.originaltext)
-        return str(self.originaltext) + " " + tokens[(random() * 1000) % len(tokens)]
+        return str(self.originaltext) + " " + tokens[(floor(random() * 1000)) % len(tokens)]
