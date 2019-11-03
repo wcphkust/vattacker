@@ -1,4 +1,5 @@
 from random import random
+import nltk
 
 class TextMutator(object):
     """
@@ -21,4 +22,5 @@ class TextMutator(object):
         :return: return the text after mutation
         """
         # TODO
-        return str(self.originaltext) + " " + str(random())
+        tokens = nltk.word_tokenize(self.originaltext)
+        return str(self.originaltext) + " " + tokens[(random() * 1000) % len(tokens)]
