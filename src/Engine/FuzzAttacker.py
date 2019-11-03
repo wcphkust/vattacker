@@ -12,6 +12,7 @@ class FuzzAttacker(object):
         self.max_attack_num = max_attack_num
         self.mutationhistory = []
         self.successfulattack = None
+        self.attack()
 
     def attack(self):
         """
