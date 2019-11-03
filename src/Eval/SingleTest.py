@@ -1,5 +1,6 @@
 from Engine.SentimentIntensityAnalyzer import *
 from Engine.Tagger import *
+from copy import deepcopy
 
 
 class SingleTest(object):
@@ -8,14 +9,14 @@ class SingleTest(object):
     """
 
     def __init__(self, text):
-        self.text = text
+        self.text = deepcopy(text)
         # TODO
         self.mutationhistory, self.successfulattack = self.test()
         analyzer = SentimentIntensityAnalyzer()
         vs = analyzer.polarity_scores(text)
         print("{:-<65} {}".format(text, str(vs)))
 
-        tagger = Tagger(text)
+        tagger = Tagger(deepcopy(self.text))
         print(tagger.pos_tagging())
         print("\n\n Single Test Done!")
 
