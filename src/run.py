@@ -1,6 +1,6 @@
 import sys
 from Eval.demotest import *
-from Eval.SingleTest import *
+from Eval.SingleTest1 import *
 
 if __name__ == '__main__':
     if ("-single" in sys.argv):
