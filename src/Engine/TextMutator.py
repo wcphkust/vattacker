@@ -21,4 +21,4 @@ class TextMutator(object):
         :return: return the text after mutation
         """
         # TODO
-        return self.originaltext + " " + str(random.random())
+        return str(self.originaltext) + " " + str(random.random())
