@@ -18,6 +18,7 @@ class SingleTest(object):
 
         tagger = Tagger(self.text)
         print(tagger.pos_tagging())
+        print(tagger.punctuation_tagging())
         print("\n\n Single Test Done!")
 
 
