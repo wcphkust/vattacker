@@ -1,4 +1,5 @@
 from Engine.SentimentIntensityAnalyzer import *
+from Engine.Tagger import *
 
 
 class SingleTest(object):
@@ -13,6 +14,9 @@ class SingleTest(object):
         analyzer = SentimentIntensityAnalyzer()
         vs = analyzer.polarity_scores(text)
         print("{:-<65} {}".format(text, str(vs)))
+
+        tagger = Tagger(text)
+        print(tagger.pos_tagging())
         print("\n\n Single Test Done!")
 
 
