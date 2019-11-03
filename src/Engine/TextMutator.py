@@ -1,3 +1,5 @@
+from random import random
+
 class TextMutator(object):
     """
     Mutate the text to change the sentiment valence to the opposite polarity
@@ -19,8 +21,4 @@ class TextMutator(object):
         :return: return the text after mutation
         """
         # TODO
-        return self.originaltext
-
-
-
-
+        return self.originaltext + " " + str(random.random())
