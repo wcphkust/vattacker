@@ -32,5 +32,5 @@ class AttackReportor(object):
         """
 
         result = vs
-        polarity = max(result, key=lambda x: result[x])
+        polarity = max(result, key=result.get)
         return result, polarity
