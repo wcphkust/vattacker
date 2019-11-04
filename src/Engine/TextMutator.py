@@ -41,7 +41,7 @@ class TextMutator(object):
         if mutation_strategy == 0:
             return self.mutation_delete_adverb()
         elif mutation_strategy == 1:
-            return self.mutation_capitalization(choice((2, 3, 4)))
+            return self.mutation_capitalization()
 
     def mutate_universal_trigger(self):
         """
