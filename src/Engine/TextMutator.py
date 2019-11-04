@@ -1,4 +1,4 @@
-from random import random
+from random import random, choice
 from math import floor
 from itertools import groupby
 import nltk
@@ -36,11 +36,11 @@ class TextMutator(object):
         :return: return the text after mutation
         """
         # TODO
-        mutation_strategy = random.choice((0, 1))
+        mutation_strategy = choice((0, 1))
         if mutation_strategy == 0:
             return self.mutate_universal_trigger()
         elif mutation_strategy == 1:
-            return self.mutate_punctuation(random.choice((2, 3, 4)))
+            return self.mutate_punctuation(choice((2, 3, 4)))
 
     def mutate_universal_trigger(self):
         """
