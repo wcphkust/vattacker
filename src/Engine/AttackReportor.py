@@ -19,7 +19,7 @@ class AttackReportor(object):
         :return: the sentiment syntax tree
         """
         # TODO
-        #
+        #ZZ
         sas = SentimentIntensityAnalyzer()
         vs = sas.polarity_scores(self.text)
 
