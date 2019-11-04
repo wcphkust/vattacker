@@ -2,6 +2,7 @@ from random import random, choice
 from math import floor
 from itertools import groupby
 import nltk
+from Engine.Tagger import *
 
 class TextMutator(object):
     """
@@ -38,7 +39,7 @@ class TextMutator(object):
         # TODO
         mutation_strategy = choice((0, 1))
         if mutation_strategy == 0:
-            return self.mutate_universal_trigger()
+            return self.mutation_delete_adverb()
         elif mutation_strategy == 1:
             return self.mutate_punctuation(choice((2, 3, 4)))
 
@@ -60,4 +61,17 @@ class TextMutator(object):
         seed_tokens = nltk.word_tokenize(seed)
         tokens = [x[0] for x in groupby(seed_tokens)]
         new_text = " ".join(tokens).replace(" !", "!"*k).replace(" ?", "?"*k)
+        return new_text
+
+    def mutation_delete_adverb(self):
+        """
+        remove adverbs in the text
+        :return: the text after removing adverbs
+        """
+        seed = self.select_best_seed()
+        tagger = Tagger(seed)
+        pos_tag = tagger.pos_tagging()
+        new_pos_tag = [(token, tag) for (token, tag) in pos_tag if tag != "RB"]
+        tokens = [token for (token, tag) in new_pos_tag]
+        new_text = " ".join(tokens)
         return new_text
