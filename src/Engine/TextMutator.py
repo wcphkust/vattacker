@@ -39,9 +39,9 @@ class TextMutator(object):
         # TODO
         mutation_strategy = choice((0, 1))
         if mutation_strategy == 0:
-            return self.mutation_delete_adverb()
+            return self.mutate_delete_adverb()
         elif mutation_strategy == 1:
-            return self.mutation_capitalization()
+            return self.mutate_capitalization()
 
     def mutate_universal_trigger(self):
         """
@@ -63,7 +63,7 @@ class TextMutator(object):
         new_text = " ".join(tokens).replace(" !", "!"*k).replace(" ?", "?"*k)
         return new_text
 
-    def mutation_delete_adverb(self):
+    def mutate_delete_adverb(self):
         """
         remove adverbs in the text
         :return: the text after removing adverbs
@@ -76,7 +76,7 @@ class TextMutator(object):
         new_text = " ".join(tokens)
         return new_text
 
-    def mutation_capitalization(self):
+    def mutate_capitalization(self):
         """
         capitalize the adverbs and adjectives
         :return:
