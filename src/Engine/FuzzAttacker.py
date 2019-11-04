@@ -21,6 +21,11 @@ class FuzzAttacker(object):
         """
         ar = AttackReportor(self.text)
         self.mutationhistory.append(deepcopy(ar))
+        print("-----------------------------------------------------------------")
+        print(str(len(self.mutationhistory)) + " " + str(ar.text))
+        print(str(ar.polarity))
+        print(str(ar.result))
+        print("-----------------------------------------------------------------")
 
         while True:
             prear = deepcopy(ar)
