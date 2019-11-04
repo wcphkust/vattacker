@@ -41,7 +41,7 @@ class TextMutator(object):
         if mutation_strategy == 0:
             return self.mutation_delete_adverb()
         elif mutation_strategy == 1:
-            return self.mutate_punctuation(choice((2, 3, 4)))
+            return self.mutation_capitalization(choice((2, 3, 4)))
 
     def mutate_universal_trigger(self):
         """
@@ -75,3 +75,22 @@ class TextMutator(object):
         tokens = [token for (token, tag) in new_pos_tag]
         new_text = " ".join(tokens)
         return new_text
+
+    def mutation_capitalization(self):
+        """
+        capitalize the adverbs and adjectives
+        :return:
+        """
+        seed = self.select_best_seed()
+        tagger = Tagger(seed)
+        pos_tag = tagger.pos_tagging()
+        new_pos_tag = []
+        for (token, tag) in pos_tag:
+            if tag in ["RB", "RBR", "RBS", "JJ", "JJR", "JJS"]:
+                new_pos_tag.append((token.upper(), tag))
+            else:
+                new_pos_tag.append((token, tag))
+        tokens = [token for (token, tag) in new_pos_tag]
+        new_text = " ".join(tokens)
+        return new_text
+
