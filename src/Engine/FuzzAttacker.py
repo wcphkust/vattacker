@@ -30,7 +30,7 @@ class FuzzAttacker(object):
 
         while True:
             prear = deepcopy(ar)
-            textmutator = TextMutator(self.text, self.mutation_history)
+            textmutator = TextMutator(self.text, self.mutation_history, self.history_pool)
             ar = AttackReportor(textmutator.new_text)
             self.mutation_history.append(deepcopy(ar))
             self.history_pool.add(textmutator.new_text)
