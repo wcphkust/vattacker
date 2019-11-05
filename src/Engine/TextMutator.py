@@ -4,6 +4,7 @@ from itertools import groupby
 import nltk
 from Engine.Tagger import *
 from Engine.Parser import *
+from Engine.Replacer import *
 
 
 class TextMutator(object):
@@ -45,13 +46,15 @@ class TextMutator(object):
         try_num = 0
         while new_text is None and try_num < 20:
             try_num += 1
-            mutation_strategy = choice((0, 1, 2))
+            mutation_strategy = choice((0, 1, 2, 3))
             if mutation_strategy == 0:
                 new_text = self.mutate_delete_adverb()
             elif mutation_strategy == 1:
                 new_text = self.mutate_capitalization()
             elif mutation_strategy == 2:
                 new_text = self.mutate_conjunctions()
+            elif mutation_strategy == 3:
+                new_text = self.mutate_synonyms()
         if new_text is None:
             new_text = self.original_text
         return new_text
@@ -115,3 +118,12 @@ class TextMutator(object):
         seed = self.select_best_seed()
         parser = Parser(seed)
         return parser.mutate_conjunction()
+
+    def mutate_synonyms(self):
+        """
+        replace the adverbs and adjectives in the text
+        :return: the text after the replacement
+        """
+        seed = self.select_best_seed()
+        replacer = Replacer(seed)
+        return replacer.synonyms_mutation()
