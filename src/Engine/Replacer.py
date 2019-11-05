@@ -41,7 +41,7 @@ class Replacer(object):
                         continue
                     new_word = random.choice(syn)
                     subsubtree.__setitem__(0, new_word)
-        return self.syntax_tree.leaves()
+        return " ".join(self.syntax_tree.leaves())
 
     def antonyms_mutation(self):
         """
