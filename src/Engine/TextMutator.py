@@ -11,26 +11,28 @@ class TextMutator(object):
     Mutate the text to change the sentiment valence to the opposite polarity
     """
 
-    def __init__(self, originaltext, mutatehistory):
+    def __init__(self, original_text, mutate_history, history_pool):
         """
-        :param originaltext: original sentence or short paragraph
-        :param mutatehistory: a sequence of mutator
+        :param original_text: original sentence or short paragraph
+        :param mutate_history: a sequence of mutator
+        :param history_pool: the set of the text for attack in history
         """
-        if not isinstance(originaltext, str):
-            text = str(originaltext).encode('utf-8')
-        self.originaltext = originaltext
-        self.mutatehistory = mutatehistory
-        self.newtext = self.mutate()
+        if not isinstance(original_text, str):
+            text = str(original_text).encode('utf-8')
+        self.original_text = original_text
+        self.mutate_history = mutate_history
+        self.mutate_history = history_pool
+        self.new_text = self.mutate()
 
     def select_best_seed(self):
-        original_reportor = self.mutatehistory[0]
+        original_reportor = self.mutate_history[0]
         original_result, original_polarity = original_reportor.fetch_report()
         best_seed = original_reportor.text
-        minpolarity = original_result[original_polarity]
-        for mutation_reportor in self.mutatehistory:
+        min_polarity = original_result[original_polarity]
+        for mutation_reportor in self.mutate_history:
             result, polarity = mutation_reportor.fetch_report()
-            if result[polarity] < minpolarity:
-                minpolarity = result[polarity]
+            if result[polarity] < min_polarity:
+                min_polarity = result[polarity]
                 best_seed = mutation_reportor.text
         return best_seed
 
@@ -39,21 +41,28 @@ class TextMutator(object):
         :return: return the text after mutation
         """
         # TODO
-        mutation_strategy = choice((0, 1, 2))
-        if mutation_strategy == 0:
-            return self.mutate_delete_adverb()
-        elif mutation_strategy == 1:
-            return self.mutate_capitalization()
-        elif mutation_strategy == 2:
-            return self.mutate_conjunctions()
+        new_text = None
+        try_num = 0
+        while new_text is None and try_num < 20:
+            try_num += 1
+            mutation_strategy = choice((0, 1, 2))
+            if mutation_strategy == 0:
+                new_text = self.mutate_delete_adverb()
+            elif mutation_strategy == 1:
+                new_text = self.mutate_capitalization()
+            elif mutation_strategy == 2:
+                new_text = self.mutate_conjunctions()
+        if new_text is None:
+            new_text = self.original_text
+        return new_text
 
     def mutate_universal_trigger(self):
         """
         universal trigger
         :return: the text after universal trigger
         """
-        tokens = nltk.word_tokenize(self.originaltext)
-        return str(self.originaltext) + " " + tokens[(floor(random() * 1000)) % len(tokens)]
+        tokens = nltk.word_tokenize(self.original_text)
+        return str(self.original_text) + " " + tokens[(floor(random() * 1000)) % len(tokens)]
 
     def mutate_punctuation(self, k):
         """

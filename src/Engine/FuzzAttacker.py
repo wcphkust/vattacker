@@ -10,8 +10,9 @@ class FuzzAttacker(object):
     def __init__(self, text, max_attack_num = 10):
         self.text = text
         self.max_attack_num = max_attack_num
-        self.mutationhistory = []
-        self.successfulattack = None
+        self.mutation_history = []
+        self.history_pool = set([])
+        self.success_attack = None
         self.attack()
 
     def attack(self):
@@ -20,25 +21,26 @@ class FuzzAttacker(object):
         :return: the successful adversarial example
         """
         ar = AttackReportor(self.text)
-        self.mutationhistory.append(deepcopy(ar))
+        self.mutation_history.append(deepcopy(ar))
         print("-----------------------------------------------------------------")
-        print(str(len(self.mutationhistory)) + " " + str(ar.text))
+        print(str(len(self.mutation_history)) + " " + str(ar.text))
         print(str(ar.polarity))
         print(str(ar.result))
         print("-----------------------------------------------------------------")
 
         while True:
             prear = deepcopy(ar)
-            textmutator = TextMutator(self.text, self.mutationhistory)
-            ar = AttackReportor(textmutator.newtext)
-            self.mutationhistory.append(deepcopy(ar))
+            textmutator = TextMutator(self.text, self.mutation_history)
+            ar = AttackReportor(textmutator.new_text)
+            self.mutation_history.append(deepcopy(ar))
+            self.history_pool.add(textmutator.new_text)
             print("-----------------------------------------------------------------")
-            print(str(len(self.mutationhistory)) + " " + str(ar.text))
+            print(str(len(self.mutation_history)) + " " + str(ar.text))
             print(str(ar.polarity))
             print(str(ar.result))
             print("-----------------------------------------------------------------")
             if ar.polarity != prear.polarity:
-                self.successfulattack = deepcopy(ar)
+                self.success_attack = deepcopy(ar)
                 break
-            if len(self.mutationhistory) > self.max_attack_num:
+            if len(self.mutation_history) > self.max_attack_num:
                 break

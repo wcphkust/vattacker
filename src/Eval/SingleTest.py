@@ -25,4 +25,4 @@ class SingleTest(object):
     def test(self):
         # TODO
         fuzz_attacker = FuzzAttacker(self.text)
-        return fuzz_attacker.mutationhistory, fuzz_attacker.successfulattack
+        return fuzz_attacker.mutation_history, fuzz_attacker.success_attack
