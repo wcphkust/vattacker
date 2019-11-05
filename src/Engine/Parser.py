@@ -35,7 +35,7 @@ class Parser(object):
                 continue
             subsubtrees = list(subtree.subtrees())
             subsubtrees_after_group = {}
-            for i in len(subsubtrees):
+            for i in range(len(subsubtrees)):
                 if not subsubtrees[i]._label in subsubtrees_after_group.keys():
                     subsubtrees_after_group[subsubtrees[i]._label] = {}
                 subsubtrees_after_group[subsubtrees[i]._label][i] = subsubtrees[i]
