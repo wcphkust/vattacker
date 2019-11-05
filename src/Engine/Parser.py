@@ -33,7 +33,11 @@ class Parser(object):
         for subtree in subtrees:
             if len(list(subtree.subtrees())) < 3:
                 continue
+            print("subtree")
+            print(subtree)
             subsubtrees = list(subtree.subtrees())
+            print("subsubtree")
+            print(subsubtrees)
             subsubtrees_after_group = {}
             for i in range(len(subsubtrees)):
                 if not subsubtrees[i]._label in subsubtrees_after_group.keys():
