@@ -26,7 +26,7 @@ class Parser(object):
         self.syntax_tree = list(parser.parse(nltk.word_tokenize(self.text)))[0]
         return self.syntax_tree
 
-    def mutate_conjunction(self, height = 2):
+    def mutate_conjunction(self, height = 3):
         if self.syntax_tree is None:
             self.syntax_tree_parser()
         subtrees = self.syntax_tree.subtrees(lambda t: t.height() == height)
