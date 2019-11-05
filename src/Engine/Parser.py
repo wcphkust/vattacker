@@ -45,9 +45,9 @@ class Parser(object):
                 subsubtrees_after_group[subsubtrees[i + 1]._label][i + 1] = subsubtrees[i + 1]
             for label in subsubtrees_after_group.keys():
                 index_list = list(subsubtrees_after_group[label].keys())
-                permutation_list = []
-                if len(index_list) > 1:
-                    permutation_list = list(permutations(index_list))
+                if len(index_list) < 2:
+                    continue
+                permutation_list = list(permutations(index_list))
                 n = len(permutation_list) - 1
                 print(len(permutation_list))
                 selected_index = math.ceil(random.uniform(1, n))
@@ -64,8 +64,3 @@ class Parser(object):
                 for j in range(len(index_list)):
                     subtree.__setitem__(index_list[j] - 1, tmp_subsubtrees[selected_permutation[j]])
         return " ".join(self.syntax_tree.leaves())
-
-
-
-
-
