@@ -34,6 +34,9 @@ class Replacer(object):
                     for candidate in candidates:
                         for lemma in candidate.lemmas():
                             syn.append(lemma.name())
+                    syn_set = set(syn)
+                    syn_set.remove(word)
+                    syn = set(syn_set)
                     if not syn:
                         continue
                     new_word = random.choice(syn)
