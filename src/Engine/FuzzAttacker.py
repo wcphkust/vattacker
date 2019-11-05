@@ -7,7 +7,7 @@ class FuzzAttacker(object):
     The core engine of vattacker
     """
 
-    def __init__(self, text, max_attack_num = 10):
+    def __init__(self, text, max_attack_num = 20):
         self.text = text
         self.max_attack_num = max_attack_num
         self.mutation_history = []
