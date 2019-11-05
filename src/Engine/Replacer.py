@@ -24,9 +24,9 @@ class Replacer(object):
         subtrees = self.syntax_tree.subtrees(lambda t: t.height() == 3)
         for subtree in subtrees:
             subsubtrees = list(subtree.subtrees())
-            for i in range(len(subsubtrees) - 1):
-                if subsubtrees[i]._label in ['JJ', 'RB']:
-                    word = subsubtrees[i].__getitem__(0)
+            for subsubtree in subsubtrees:
+                if subsubtree._label in ['JJ', 'RB']:
+                    word = subsubtree.__getitem__(0)
                     print("word")
                     print(word)
                     candidates = wordnet.synsets(word)
@@ -37,7 +37,7 @@ class Replacer(object):
                     if not syn:
                         continue
                     new_word = random.choice(syn)
-                    subsubtrees[i].__setitem__(0, new_word)
+                    subsubtree.__setitem__(0, new_word)
         return self.syntax_tree.leaves()
 
     def antonyms_mutation(self):
