@@ -33,11 +33,11 @@ class Parser(object):
         for subtree in subtrees:
             if len(list(subtree.subtrees())) < 3:
                 continue
-            print("subtree")
-            print(subtree)
+            # print("subtree")
+            # print(subtree)
             subsubtrees = list(subtree.subtrees())
-            print("subsubtree")
-            print(subsubtrees)
+            # print("subsubtree")
+            # print(subsubtrees)
             subsubtrees_after_group = {}
             for i in range(len(subsubtrees) - 1):
                 if not subsubtrees[i + 1]._label in subsubtrees_after_group.keys():
@@ -49,18 +49,18 @@ class Parser(object):
                     continue
                 permutation_list = list(permutations(index_list))
                 n = len(permutation_list) - 1
-                print(len(permutation_list))
+                # print(len(permutation_list))
                 selected_index = math.ceil(random.uniform(1, n))
-                print(selected_index)
+                # print(selected_index)
                 selected_permutation = list(permutation_list[selected_index])
                 # selected_permutation = permutation_list[1]
                 tmp_subsubtrees = copy.deepcopy(subsubtrees)
-                print("index_list")
-                print(index_list)
-                print("selected permutation")
-                print(selected_permutation)
-                print("length of subtrees without root")
-                print(len(subsubtrees) - 1)
+                # print("index_list")
+                # print(index_list)
+                # print("selected permutation")
+                # print(selected_permutation)
+                # print("length of subtrees without root")
+                # print(len(subsubtrees) - 1)
                 for j in range(len(index_list)):
                     subtree.__setitem__(index_list[j] - 1, tmp_subsubtrees[selected_permutation[j]])
         return " ".join(self.syntax_tree.leaves())
