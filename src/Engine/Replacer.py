@@ -27,6 +27,8 @@ class Replacer(object):
             for i in range(len(subsubtrees) - 1):
                 if subsubtrees[i]._label in ['JJ', 'RB']:
                     word = subsubtrees[i].__getitem__(0)
+                    print("word")
+                    print(word)
                     candidates = wordnet.synsets(word)
                     syn = []
                     for candidate in candidates:
