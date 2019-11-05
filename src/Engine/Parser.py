@@ -40,7 +40,7 @@ class Parser(object):
                     subsubtrees_after_group[subsubtrees[i]._label] = {}
                 subsubtrees_after_group[subsubtrees[i]._label][i] = subsubtrees[i]
             for label in subsubtrees_after_group.keys():
-                index_list = list(subsubtrees_after_group[label].keys)
+                index_list = list(subsubtrees_after_group[label].keys())
                 permutation_list = []
                 if len(index_list) > 1:
                     permutation_list = permutations(index_list)
