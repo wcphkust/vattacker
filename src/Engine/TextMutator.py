@@ -3,6 +3,8 @@ from math import floor
 from itertools import groupby
 import nltk
 from Engine.Tagger import *
+from Engine.Parser import *
+
 
 class TextMutator(object):
     """
@@ -37,11 +39,13 @@ class TextMutator(object):
         :return: return the text after mutation
         """
         # TODO
-        mutation_strategy = choice((0, 1))
+        mutation_strategy = choice((0, 1, 2))
         if mutation_strategy == 0:
             return self.mutate_delete_adverb()
         elif mutation_strategy == 1:
             return self.mutate_capitalization()
+        elif mutation_strategy == 2:
+            return self.mutate_conjunctions()
 
     def mutate_universal_trigger(self):
         """
@@ -79,7 +83,7 @@ class TextMutator(object):
     def mutate_capitalization(self):
         """
         capitalize the adverbs and adjectives
-        :return:
+        :return: the text after capitalization
         """
         seed = self.select_best_seed()
         tagger = Tagger(seed)
@@ -94,3 +98,11 @@ class TextMutator(object):
         new_text = " ".join(tokens)
         return new_text
 
+    def mutate_conjunctions(self):
+        """
+        mutate the conjunctions in the text
+        :return: the text after conjunction mutation
+        """
+        seed = self.select_best_seed()
+        parser = Parser(seed)
+        return parser.mutate_conjunction()
