@@ -55,7 +55,7 @@ class Parser(object):
                 tmp_subsubtrees = copy.deepcopy(subsubtrees)
                 for j in index_list:
                     subtree.__setitem__(j - 1, tmp_subsubtrees[selected_permutation[j]])
-        return " ".join(self.syntax_tree.leaves)
+        return " ".join(self.syntax_tree.leaves())
 
 
 
