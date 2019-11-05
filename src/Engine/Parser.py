@@ -46,10 +46,10 @@ class Parser(object):
                     permutation_list = permutations(index_list)
                 n = len(permutation_list) - 1
                 selected_index = math.ceil(random.uniform(1, n))
-                selected_permutation = permutations[selected_index]
+                selected_permutation = permutation_list[selected_index]
                 tmp_subsubtrees = copy.deepcopy(subsubtrees)
                 for j in index_list:
-                    subtree.__setitem__(j, tmp_subsubtrees[selected_index[j]])
+                    subtree.__setitem__(j, tmp_subsubtrees[selected_permutation[j]])
         return " ".join(self.syntax_tree.leaves)
 
 
