@@ -49,7 +49,9 @@ class Parser(object):
                 if len(index_list) > 1:
                     permutation_list = list(permutations(index_list))
                 n = len(permutation_list) - 1
+                print(len(permutation_list))
                 selected_index = math.ceil(random.uniform(1, n))
+                print(selected_index)
                 selected_permutation = list(permutation_list[selected_index])
                 # selected_permutation = permutation_list[1]
                 tmp_subsubtrees = copy.deepcopy(subsubtrees)
