@@ -36,7 +36,7 @@ class Replacer(object):
                             syn.append(lemma.name())
                     syn_set = set(syn)
                     syn_set.remove(word)
-                    syn = set(syn_set)
+                    syn = list(syn_set)
                     if not syn:
                         continue
                     new_word = random.choice(syn)
