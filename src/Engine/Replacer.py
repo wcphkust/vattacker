@@ -35,7 +35,8 @@ class Replacer(object):
                         for lemma in candidate.lemmas():
                             syn.append(lemma.name())
                     syn_set = set(syn)
-                    syn_set.remove(word)
+                    if word in syn_set:
+                        syn_set.remove(word)
                     syn = list(syn_set)
                     if not syn:
                         continue
