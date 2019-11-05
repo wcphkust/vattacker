@@ -21,7 +21,7 @@ class TextMutator(object):
             text = str(original_text).encode('utf-8')
         self.original_text = original_text
         self.mutate_history = mutate_history
-        self.mutate_history = history_pool
+        self.history_pool = history_pool
         self.new_text = self.mutate()
 
     def select_best_seed(self):
