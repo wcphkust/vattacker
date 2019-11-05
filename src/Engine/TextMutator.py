@@ -46,7 +46,7 @@ class TextMutator(object):
         try_num = 0
         while new_text is None and try_num < 20:
             try_num += 1
-            mutation_strategy = choice((0, 1, 2, 3))
+            mutation_strategy = choice((0, 1, 2, 3, 4))
             if mutation_strategy == 0:
                 new_text = self.mutate_delete_adverb()
             elif mutation_strategy == 1:
@@ -55,6 +55,8 @@ class TextMutator(object):
                 new_text = self.mutate_conjunctions()
             elif mutation_strategy == 3:
                 new_text = self.mutate_synonyms()
+            elif mutation_strategy == 4:
+                new_text = self.mutate_add_whitespace()
         if new_text is None:
             new_text = self.original_text
         return new_text
@@ -66,6 +68,19 @@ class TextMutator(object):
         """
         tokens = nltk.word_tokenize(self.original_text)
         return str(self.original_text) + " " + tokens[(floor(random() * 1000)) % len(tokens)]
+
+    def mutate_add_whitespace(self):
+        """
+        add whitespace to trigger
+        :return: the text after add whitespace
+        """
+        tokens = nltk.word_tokenize(self.original_text)
+        new_text = ""
+        for token in tokens:
+            new_text += token
+            whitespace = " " * random.choice((1, 2))
+            new_text += whitespace
+        return new_text
 
     def mutate_punctuation(self, k):
         """
