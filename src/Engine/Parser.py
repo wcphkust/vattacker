@@ -5,9 +5,11 @@ import random
 import math
 import copy
 
+
 class Parser(object):
     """
     Parse the text to obtain syntax tree and other intermediate representations
+    Support conjunction based mutation
     """
 
     def __init__(self, text):
