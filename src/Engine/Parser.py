@@ -42,7 +42,7 @@ class Parser(object):
             for i in range(len(subsubtrees) - 1):
                 if not subsubtrees[i + 1]._label in subsubtrees_after_group.keys():
                     subsubtrees_after_group[subsubtrees[i + 1]._label] = {}
-                subsubtrees_after_group[subsubtrees[i + 1]._label][i + 1] = subsubtrees[i]
+                subsubtrees_after_group[subsubtrees[i + 1]._label][i + 1] = subsubtrees[i + 1]
             for label in subsubtrees_after_group.keys():
                 index_list = list(subsubtrees_after_group[label].keys())
                 permutation_list = []
@@ -53,8 +53,14 @@ class Parser(object):
                 selected_permutation = permutation_list[selected_index]
                 # selected_permutation = permutation_list[1]
                 tmp_subsubtrees = copy.deepcopy(subsubtrees)
+                print("index_list")
+                print(index_list)
+                print("selected permutation")
+                print(selected_permutation)
+                print("length of subtrees without root")
+                print(len(subsubtrees) - 1)
                 for j in index_list:
-                    subtree.__setitem__(j, tmp_subsubtrees[selected_permutation[j]])
+                    subtree.__setitem__(index_list[j] - 1, tmp_subsubtrees[selected_permutation[j]])
         return " ".join(self.syntax_tree.leaves())
 
 
