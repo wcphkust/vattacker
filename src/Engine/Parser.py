@@ -47,7 +47,7 @@ class Parser(object):
                 index_list = list(subsubtrees_after_group[label].keys())
                 permutation_list = []
                 if len(index_list) > 1:
-                    permutation_list = permutations(index_list)
+                    permutation_list = list(permutations(index_list))
                 n = len(permutation_list) - 1
                 selected_index = math.ceil(random.uniform(1, n))
                 selected_permutation = permutation_list[selected_index]
