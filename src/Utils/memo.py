@@ -31,3 +31,6 @@ ner_tagger = CoreNLPParser(url='http://localhost:8999', tagtype='ner')
 ls_ner = list(ner_tagger.tag(('Rami Eid is studying at Stony Brook University in NY'.
 split())))
 print(ls_ner)
+
+from Parser import *
+Parser("I am smart but lazy").mutate_conjunction()
