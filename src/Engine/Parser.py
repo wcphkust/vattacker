@@ -50,7 +50,7 @@ class Parser(object):
                     permutation_list = list(permutations(index_list))
                 n = len(permutation_list) - 1
                 selected_index = math.ceil(random.uniform(1, n))
-                selected_permutation = permutation_list[selected_index]
+                selected_permutation = list(permutation_list[selected_index])
                 # selected_permutation = permutation_list[1]
                 tmp_subsubtrees = copy.deepcopy(subsubtrees)
                 print("index_list")
@@ -59,7 +59,7 @@ class Parser(object):
                 print(selected_permutation)
                 print("length of subtrees without root")
                 print(len(subsubtrees) - 1)
-                for j in index_list:
+                for j in range(len(index_list)):
                     subtree.__setitem__(index_list[j] - 1, tmp_subsubtrees[selected_permutation[j]])
         return " ".join(self.syntax_tree.leaves())
 
