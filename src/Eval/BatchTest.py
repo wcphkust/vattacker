@@ -20,9 +20,12 @@ class BatchTest(object):
         batch test
         """
         for text in self.texts:
-            single_test = SingleTest(text)
+            single_test = SingleTest(text, False)
             if single_test.successfulattack is not None:
                 self.success_attack.append([deepcopy(single_test.mutationhistory), deepcopy(single_test.successfulattack)])
                 print("successful attack")
             else:
                 self.failed_attack.append([deepcopy(single_test.mutationhistory), deepcopy(single_test.successfulattack)])
+                print("failed attack")
+            print(str(len(self.success_attack)) + " / " + str(len(self.success_attack) + len(self.failed_attack))
+                  + " / " + str(len(self.total)))

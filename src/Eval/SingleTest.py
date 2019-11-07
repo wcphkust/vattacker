@@ -9,8 +9,9 @@ class SingleTest(object):
     test single sentence or short paragraph
     """
 
-    def __init__(self, text):
+    def __init__(self, text, is_print = True):
         self.text = deepcopy(text)
+        self.is_print = is_print
         # TODO
         self.mutationhistory, self.successfulattack = self.test()
         analyzer = SentimentIntensityAnalyzer()
@@ -24,5 +25,5 @@ class SingleTest(object):
 
     def test(self):
         # TODO
-        fuzz_attacker = FuzzAttacker(self.text)
+        fuzz_attacker = FuzzAttacker(self.text, self.is_print)
         return fuzz_attacker.mutation_history, fuzz_attacker.success_attack
