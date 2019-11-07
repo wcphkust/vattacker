@@ -17,6 +17,6 @@ def import_data(filepath):
 def export_success_attack(filepath, success_result):
     time_array = time.localtime(time.time())
     time_string = time.strftime("%Y%m%d%H%M%S", time_array)
-    filepath = filepath + "_test_" + time_string
+    filepath = filepath + "_result_" + time_string
     with open(filepath, "a") as f:
         json.dump(success_result, f)

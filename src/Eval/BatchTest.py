@@ -21,8 +21,6 @@ class BatchTest(object):
         """
         batch test
         """
-        trys = self.texts[:11]
-        self.texts = trys
         for text in self.texts:
             single_test = SingleTest(text, False)
             if single_test.successfulattack is not None:
