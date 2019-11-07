@@ -16,7 +16,7 @@ class FuzzAttacker(object):
         self.is_print = is_print
         self.attack()
 
-    def attack(self, ):
+    def attack(self):
         """
         attack sentiment analysis system by mutating the text
         :return: the successful adversarial example
