@@ -15,6 +15,7 @@ class BatchTest(object):
         self.test()
         self.success = len(self.success_attack)
         self.fail = len(self.failed_attack)
+        export_success_attack(filepath, self.success_result)
 
     def test(self):
         """
@@ -34,4 +35,5 @@ class BatchTest(object):
                 print("failed attack")
             print(str(len(self.success_attack)) + " / " + str(len(self.success_attack) + len(self.failed_attack))
                   + " / " + str(self.total))
+
 
