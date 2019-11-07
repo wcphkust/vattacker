@@ -28,4 +28,4 @@ class BatchTest(object):
                 self.failed_attack.append([deepcopy(single_test.mutationhistory), deepcopy(single_test.successfulattack)])
                 print("failed attack")
             print(str(len(self.success_attack)) + " / " + str(len(self.success_attack) + len(self.failed_attack))
-                  + " / " + str(len(self.total)))
+                  + " / " + str(self.total))
