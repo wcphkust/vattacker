@@ -21,12 +21,13 @@ class BatchTest(object):
         """
         batch test
         """
-        trys = self.texts[:30]
+        trys = self.texts[:20]
         self.texts = trys
         for text in self.texts:
             single_test = SingleTest(text, False)
             if single_test.successfulattack is not None:
-                self.success_attack.append([deepcopy(single_test.mutationhistory), deepcopy(single_test.successfulattack)])
+                self.success_attack.append([deepcopy(single_test.mutationhistory),
+                                            deepcopy(single_test.successfulattack.text)])
                 single_result = {"original_text": text, "adversarial text": single_test.successfulattack}
                 self.success_result.append(single_result)
                 print("successful attack")
