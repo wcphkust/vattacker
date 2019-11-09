@@ -11,7 +11,7 @@ def import_data(filepath):
             break
         test_case.append(line.rstrip("\n"))
     file.close()
-    return test_case
+    return test_case[:200]
 
 
 def export_success_attack(filepath, success_result):
