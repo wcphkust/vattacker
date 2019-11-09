@@ -56,7 +56,7 @@ class TextMutator(object):
                 mutation_strategy = \
                     np.random.choice([0, 1, 2, 3, 4, 5], replace=True, p=[(weight/sum(self.mutator_weight)) for weight in self.mutator_weight])
             elif self.node == "random":
-                mutation_strategy = choice((0, 1, 2, 3, 4, 5))
+                mutation_strategy = random.choice([0, 1, 2, 3, 4, 5])
             if mutation_strategy == 0:
                 new_text = self.mutate_delete_adverb()
             elif mutation_strategy == 1:
@@ -68,7 +68,7 @@ class TextMutator(object):
             elif mutation_strategy == 4:
                 new_text = self.mutate_add_whitespace()
             elif mutation_strategy == 5:
-                next_text = self.mutate_punctuation()
+                new_text = self.mutate_punctuation(random.choice([2, 3, 4]))
         if new_text is None:
             new_text = self.original_text
         return new_text, mutation_strategy
