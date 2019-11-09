@@ -22,6 +22,7 @@ class BatchTest(object):
         """
         batch test
         """
+        attack_num = 0
         for text in self.texts:
             single_test = SingleTest(text, self.is_nonrandom_mutation, False)
             if single_test.successful_attack is not None:
@@ -30,8 +31,11 @@ class BatchTest(object):
                 single_result = {"original_text": text, "adversarial text": single_test.successful_attack.text}
                 self.success_result.append(single_result)
                 print("successful attack")
+                attack_num += len(single_test.mutation_history)
             else:
                 self.failed_attack.append([deepcopy(single_test.mutation_history), deepcopy(single_test.successful_attack)])
                 print("failed attack")
+                attack_num += len(single_test.mutation_history)
             print(str(len(self.success_attack)) + " / " + str(len(self.success_attack) + len(self.failed_attack))
                   + " / " + str(self.total))
+            print("total attacks: " + str(attack_num))
