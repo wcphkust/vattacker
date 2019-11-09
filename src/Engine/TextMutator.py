@@ -2,17 +2,19 @@ from random import random, choice
 from math import floor
 from itertools import groupby
 import nltk
+import numpy as np
+import pandas as pd
 from Engine.Tagger import *
 from Engine.Parser import *
 from Engine.Replacer import *
 
 
-class TextMutator(object):
+class TextMutator(object, mode):
     """
     Mutate the text to change the sentiment valence to the opposite polarity
     """
 
-    def __init__(self, original_text, mutate_history, history_pool):
+    def __init__(self, mutator_weight, original_text, mutate_history, history_pool):
         """
         :param original_text: original sentence or short paragraph
         :param mutate_history: a sequence of mutator
@@ -20,10 +22,12 @@ class TextMutator(object):
         """
         if not isinstance(original_text, str):
             text = str(original_text).encode('utf-8')
+        self.mutator_weight = mutator_weight
         self.original_text = original_text
         self.mutate_history = mutate_history
         self.history_pool = history_pool
-        self.new_text = self.mutate()
+        self.mode = mode
+        self.new_text, self.mutator_strategy = self.mutate(self.mode)
 
     def select_best_seed(self):
         original_reportor = self.mutate_history[0]
@@ -44,9 +48,15 @@ class TextMutator(object):
         # TODO
         new_text = None
         try_num = 0
+        mutation_strategy = -1
         while new_text is None and try_num < 20:
             try_num += 1
-            mutation_strategy = choice((0, 1, 2, 3, 4))
+            mutation_strategy = -1
+            if self.mode == "nonrandom":
+                mutation_strategy = \
+                    np.random.choice([0, 1, 2, 3, 4, 5], replace=True, p=[(weight/sum(self.mutator_weight) for weight in self.mutator_weight)])
+            elif self.node == "random":
+                mutation_strategy = choice((0, 1, 2, 3, 4, 5))
             if mutation_strategy == 0:
                 new_text = self.mutate_delete_adverb()
             elif mutation_strategy == 1:
@@ -57,9 +67,11 @@ class TextMutator(object):
                 new_text = self.mutate_synonyms()
             elif mutation_strategy == 4:
                 new_text = self.mutate_add_whitespace()
+            elif mutation_strategy == 5:
+                next_text = self.mutate_punctuation()
         if new_text is None:
             new_text = self.original_text
-        return new_text
+        return new_text, mutation_strategy
 
     def mutate_universal_trigger(self):
         """
