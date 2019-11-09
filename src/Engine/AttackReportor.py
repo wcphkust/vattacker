@@ -20,5 +20,10 @@ class AttackReportor(object):
         """
         testimonial = TextBlob(self.text)
         sentiment_result = testimonial.sentiment
-        polarity = "pos" if sentiment_result.polarity > 0 else "neg"
+        if sentiment_result.polarity > 0:
+            polarity = "pos"
+        elif sentiment_result.polarity < 0:
+            polarity = "neg"
+        else:
+            polarity = "neu"
         return sentiment_result, polarity
