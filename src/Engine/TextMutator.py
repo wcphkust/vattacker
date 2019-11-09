@@ -27,7 +27,7 @@ class TextMutator(object):
         self.mutate_history = mutate_history
         self.history_pool = history_pool
         self.mode = mode
-        self.new_text, self.mutator_strategy = self.mutate(self.mode)
+        self.new_text, self.mutator_strategy = self.mutate()
 
     def select_best_seed(self):
         original_reportor = self.mutate_history[0]
