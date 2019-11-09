@@ -14,6 +14,7 @@ class SingleTest(object):
         self.is_print = is_print
         self.mutation_history, self.successful_attack = self.test()
         self.is_nonrandom_mutation = is_nonrandom_mutation
+        self.is_nonrandom_mutation = is_nonrandom_mutation
         print("\n\n Initial Single Analysis Done!")
 
     def test(self):
