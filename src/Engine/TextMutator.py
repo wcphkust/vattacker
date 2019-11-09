@@ -9,12 +9,12 @@ from Engine.Parser import *
 from Engine.Replacer import *
 
 
-class TextMutator(object, mode):
+class TextMutator(object):
     """
     Mutate the text to change the sentiment valence to the opposite polarity
     """
 
-    def __init__(self, mutator_weight, original_text, mutate_history, history_pool):
+    def __init__(self, mutator_weight, original_text, mutate_history, history_pool, mode="nonrandom"):
         """
         :param original_text: original sentence or short paragraph
         :param mutate_history: a sequence of mutator
