@@ -10,11 +10,10 @@ class SingleTest(object):
     """
 
     def __init__(self, text, is_nonrandom_mutation = True, is_print = True):
-        self.text = deepcopy(text)
+        self.is_nonrandom_mutation = is_nonrandom_mutation
         self.is_print = is_print
+        self.text = deepcopy(text)
         self.mutation_history, self.successful_attack = self.test()
-        self.is_nonrandom_mutation = is_nonrandom_mutation
-        self.is_nonrandom_mutation = is_nonrandom_mutation
         print("\n\n Initial Single Analysis Done!")
 
     def test(self):
