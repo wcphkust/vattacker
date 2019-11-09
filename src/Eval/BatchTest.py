@@ -12,10 +12,10 @@ class BatchTest(object):
         self.success_attack = []
         self.failed_attack = []
         self.success_result = []
+        self.is_nonrandom_mutation = is_nonrandom_mutation
         self.test()
         self.success = len(self.success_attack)
         self.fail = len(self.failed_attack)
-        self.is_nonrandom_mutation = is_nonrandom_mutation
         export_success_attack(filepath, self.success_result)
 
     def test(self):
