@@ -1,5 +1,5 @@
 from Engine.SentimentIntensityAnalyzer import *
-
+from textblob import TextBlob
 
 class AttackReportor(object):
     """
@@ -18,18 +18,7 @@ class AttackReportor(object):
         attach the sentiment analysis system
         :return: the sentiment syntax tree
         """
-        # TODO
-        sas = SentimentIntensityAnalyzer()
-        vs = sas.polarity_scores(self.text)
-
-        """
-        sentiment_dict = \
-            {"neg": round(neg, 3),
-             "neu": round(neu, 3),
-             "pos": round(pos, 3),
-             "compound": round(compound, 4)}
-        """
-
-        result = vs
-        polarity = max(result, key=result.get)
-        return result, polarity
+        testimonial = TextBlob(self.text)
+        sentiment_result = testimonial.sentiment
+        polarity = "pos" if sentiment_result.polarity > 0 else "neg"
+        return sentiment_result, polarity

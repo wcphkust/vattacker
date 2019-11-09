@@ -34,5 +34,3 @@ class BatchTest(object):
                 print("failed attack")
             print(str(len(self.success_attack)) + " / " + str(len(self.success_attack) + len(self.failed_attack))
                   + " / " + str(self.total))
-
-
