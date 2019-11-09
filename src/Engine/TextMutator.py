@@ -54,7 +54,7 @@ class TextMutator(object):
             mutation_strategy = -1
             if self.mode == "nonrandom":
                 mutation_strategy = \
-                    np.random.choice([0, 1, 2, 3, 4, 5], replace=True, p=[(weight/sum(self.mutator_weight) for weight in self.mutator_weight)])
+                    np.random.choice([0, 1, 2, 3, 4, 5], replace=True, p=[(weight/sum(self.mutator_weight)) for weight in self.mutator_weight])
             elif self.node == "random":
                 mutation_strategy = choice((0, 1, 2, 3, 4, 5))
             if mutation_strategy == 0:
