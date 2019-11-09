@@ -29,11 +29,11 @@ class TextMutator(object):
         original_reportor = self.mutate_history[0]
         original_result, original_polarity = original_reportor.fetch_report()
         best_seed = original_reportor.text
-        min_polarity = original_result[original_polarity]
+        min_polarity = original_result.polarity
         for mutation_reportor in self.mutate_history:
             result, polarity = mutation_reportor.fetch_report()
-            if result[polarity] < min_polarity:
-                min_polarity = result[polarity]
+            if abs(result.polarity) < abs(min_polarity):
+                min_polarity = result.polarity
                 best_seed = mutation_reportor.text
         return best_seed
 
