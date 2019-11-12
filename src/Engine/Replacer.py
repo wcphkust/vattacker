@@ -28,7 +28,7 @@ class Replacer(object):
             for subsubtree in subsubtrees:
                 if subsubtree._label in ['JJ', 'RB']:
                     word = subsubtree.__getitem__(0)
-                    candidates_with_sim = syn(word, 5)
+                    candidates_with_sim = syn(word, 10)
                     candidates = set(candidates_with_sim.keys())
                     if not candidates:
                         continue
