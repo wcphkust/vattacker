@@ -25,11 +25,11 @@ def model_w2v():
     # train a w2v vector
     model_file_name = "word2vec.model"
     if os.path.isfile(model_file_name):
-        print("model exist. Loading the model now")
+        # print("model exist. Loading the model now")
         model = Word2Vec.load("word2vec.model")
-        print('OK')
+        # print('OK')
     else:
-        print("model not exist. Training the model now")
+        # print("model not exist. Training the model now")
         sentences = []
         for x in X:
             sentences += news_to_sentences(x)
@@ -66,12 +66,12 @@ def cal_sim(syn_list, model, word_input):
         try:
             syn_sim = model.n_similarity(word_input, str(synonyms))
             syn_sim_list.append(syn_sim)
-            print(synonyms, syn_sim)
+            # print(synonyms, syn_sim)
         except KeyError:
-            print("one word not in vocabulary: ", syn)
+            # print("one word not in vocabulary: ", syn)
             syn_sim = 0
             syn_sim_list.append(syn_sim)
-            print(synonyms, syn_sim)
+            # print(synonyms, syn_sim)
     return syn_sim_list
 
 
@@ -86,10 +86,10 @@ def get_top_k(syn2, syn_sim2, k):
     syn_top_k = list()
     syn_sim_top_k = list()
     for index in max_val_index_list:
-        print(syn2[index], syn_sim2[index])
+        # print(syn2[index], syn_sim2[index])
         syn_top_k.append(syn2[index])
         syn_sim_top_k.append(syn_sim2[index])
-    print(syn_top_k, syn_sim_top_k)
+    # print(syn_top_k, syn_sim_top_k)
     return syn_top_k, syn_sim_top_k
 
 
@@ -106,7 +106,7 @@ def syn(word_input, k):
     syn_list = query_synset(word_input)
     syn2 = duplicate_remove(syn_list, word_input)
     syn_sim2 = cal_sim(syn2, model, word_input)
-    print(syn_sim2)
+    # print(syn_sim2)
     syn_top_k, syn_sim_top_k = get_top_k(syn2, syn_sim2, k)
     syn_top_k_with_sim = {}
     for i in range(len(syn_top_k)):
