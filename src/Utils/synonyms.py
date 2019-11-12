@@ -61,19 +61,18 @@ def query_synset(word_input):
 
 
 def cal_sim(syn, model, word_input):
-    syn_sim = list()
+    syn_sim_list = list()
     for syn in syn:
-        # print(syn)
         try:
-            syn_sim = model.n_similarity(word_input,str(syn))
-            syn_sim.append(syn_sim)
+            syn_sim = model.n_similarity(word_input, str(syn))
+            syn_sim_list.append(syn_sim)
             print(syn, syn_sim)
         except KeyError:
             print ("one word not in vocabulary: ", syn)
             syn_sim = 0
-            syn_sim.append(syn_sim)
+            syn_sim_list.append(syn_sim)
             print(syn, syn_sim)
-    return syn_sim
+    return syn_sim_list
 
 
 def get_top_k(syn2, syn_sim2, k):
