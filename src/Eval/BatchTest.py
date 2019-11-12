@@ -6,9 +6,10 @@ class BatchTest(object):
     test on a testing dataset
     """
 
-    def __init__(self, filepath, is_nonrandom_mutation):
+    def __init__(self, filepath, is_nonrandom_mutation, max_attack_num=5):
         self.texts = import_data(filepath)
         self.total = len(self.texts)
+        self.max_attack_num = max_attack_num
         self.success_attack = []
         self.failed_attack = []
         self.success_result = []
@@ -24,7 +25,7 @@ class BatchTest(object):
         """
         attack_num = 0
         for text in self.texts:
-            single_test = SingleTest(text, self.is_nonrandom_mutation, False)
+            single_test = SingleTest(text, self.is_nonrandom_mutation, False, self.max_attack_num)
             if single_test.successful_attack is not None:
                 self.success_attack.append([deepcopy(single_test.mutation_history),
                                             deepcopy(single_test.successful_attack)])
