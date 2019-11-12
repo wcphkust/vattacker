@@ -2,28 +2,28 @@ from sklearn.datasets import fetch_20newsgroups
 from bs4 import BeautifulSoup
 import nltk, re
 from gensim.models import Word2Vec
-from nltk.corpus import wordnet as wn #Import wordnet from the NLTK
-import heapq # for top-K problems
+from nltk.corpus import wordnet as wn
+import heapq
 import os
 
 news = fetch_20newsgroups(subset='all')
 X, y = news.data, news.target
-# nltk.download('punkt')
 
-# Preprocess the corpus
+
 def news_to_sentences(news):
+    # Preprocess the corpus
     news_text = BeautifulSoup(news, 'lxml').get_text()
     tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     raw_sentences = tokenizer.tokenize(news_text)
-
     sentences = []
     for sent in raw_sentences:
         sentences.append(re.sub('[^a-zA-Z]', ' ', sent.lower().strip()).split())
     return sentences
 
-#train a w2v vector
+
 def model_w2v():
-    model_file_name = "word2vec.model"# the name of the model
+    # train a w2v vector
+    model_file_name = "word2vec.model"
     if os.path.isfile(model_file_name):
         print("model exist. Loading the model now")
         model = Word2Vec.load("word2vec.model")
@@ -34,75 +34,78 @@ def model_w2v():
         for x in X:
             sentences += news_to_sentences(x)
         # parameters
-        num_features = 300  #
-        min_word_count = 20  #
-        num_workers = 10  #
-        context = 5  #
-        downsampling = 1e-3  #
-
+        num_features = 300
+        min_word_count = 20
+        num_workers = 10
+        context = 5
+        down_sampling = 1e-3
         model = Word2Vec(sentences, workers=num_workers, size=num_features,
-                         min_count=min_word_count, window=context, sample=downsampling)
+                         min_count=min_word_count, window=context, sample=down_sampling)
         model.init_sims(replace=True)
         print('OK')
         model.save(model_file_name)
         print('MODEL SAVED')
     return model
 
-def query_synset(word_input):
-    SYN = list()
-    ANT = list()
-    for synset in wn.synsets(word_input):
-       for lemma in synset.lemmas():
-          SYN.append(lemma.name())    #add the synonyms
-          if lemma.antonyms():    #When antonyms are available, add them into the list
-            ANT.append(lemma.antonyms()[0].name())
-    print('Synonyms: ' + str(SYN))
-    return SYN
 
-def cal_sim(SYN, model, word_input):
-    SYN_SIM = list()
-    for syn in SYN:
+def query_synset(word_input):
+    syn = list()
+    ant = list()
+    for syn_set in wn.synsets(word_input):
+       for lemma in syn_set.lemmas():
+            syn.append(lemma.name())
+            if lemma.antonyms():
+                ant.append(lemma.antonyms()[0].name())
+    print('Synonyms: ' + str(syn))
+    return syn
+
+
+def cal_sim(syn, model, word_input):
+    syn_sim = list()
+    for syn in syn:
         # print(syn)
         try:
             syn_sim = model.n_similarity(word_input,str(syn))
-            SYN_SIM.append(syn_sim)
+            syn_sim.append(syn_sim)
             print(syn, syn_sim)
         except KeyError:
             print ("one word not in vocabulary: ", syn)
             syn_sim = 0
-            SYN_SIM.append(syn_sim)
+            syn_sim.append(syn_sim)
             print(syn, syn_sim)
-    return SYN_SIM
+    return syn_sim
 
-def get_top_k(SYN2,SYN_SIM2, k):
+
+def get_top_k(syn2, syn_sim2, k):
     # solve the problem of non-enough values
-    if k > len(SYN_SIM2):
-        k = len(SYN_SIM2)
+    if k > len(syn_sim2):
+        k = len(syn_sim2)
         print('k>=length, parts of results will be shown')
     else:
         pass
-    max_val_index_list = map(SYN2.index, heapq.nlargest(k, SYN2))
-    SYN_top_k = list()
-    SYN_SIM_top_k = list()
+    max_val_index_list = map(syn2.index, heapq.nlargest(k, syn2))
+    syn_top_k = list()
+    syn_sim_top_k = list()
     for index in max_val_index_list:
-        print(SYN2[index], SYN_SIM2[index])
-        SYN_top_k.append(SYN2[index])
-        SYN_SIM_top_k.append(SYN_SIM2[index])
-    print(SYN_top_k, SYN_SIM_top_k)
-    return SYN_top_k, SYN_SIM_top_k
+        print(syn2[index], syn_sim2[index])
+        syn_top_k.append(syn2[index])
+        syn_sim_top_k.append(syn_sim2[index])
+    print(syn_top_k, syn_sim_top_k)
+    return syn_top_k, syn_sim_top_k
 
-def duplicate_remove(SYN, word_input):
-    SYN1 = list(set(SYN))  # remove duplicated items SYN->SYN1
-    # print(SYN1)
-    SYN2 = SYN1
-    SYN2.remove(word_input)
-    return SYN2
+
+def duplicate_remove(syn, word_input):
+    syn1 = list(set(syn))
+    syn2 = syn1
+    syn2.remove(word_input)
+    return syn2
+
 
 def syn(word_input, k):
     model = model_w2v()
-    SYN = query_synset(word_input)
-    SYN2 = duplicate_remove(SYN, word_input)
-    SYN_SIM2 = cal_sim(SYN2, model, word_input)
-    print(SYN_SIM2)
-    SYN_top_k, SYN_SIM_top_k = get_top_k(SYN2, SYN_SIM2, k)
-    return SYN_top_k, SYN_SIM_top_k
+    syn = query_synset(word_input)
+    syn2 = duplicate_remove(syn, word_input)
+    syn_sim2 = cal_sim(syn2, model, word_input)
+    print(syn_sim2)
+    syn_top_k, syn_sim_top_k = get_top_k(syn2, syn_sim2, k)
+    return syn_top_k, syn_sim_top_k
