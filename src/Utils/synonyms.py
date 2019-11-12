@@ -10,9 +10,9 @@ news = fetch_20newsgroups(subset='all')
 X, y = news.data, news.target
 
 
-def news_to_sentences(news):
+def news_to_sentences(news_in):
     # Preprocess the corpus
-    news_text = BeautifulSoup(news, 'lxml').get_text()
+    news_text = BeautifulSoup(news_in, 'lxml').get_text()
     tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     raw_sentences = tokenizer.tokenize(news_text)
     sentences = []
@@ -49,29 +49,29 @@ def model_w2v():
 
 
 def query_synset(word_input):
-    syn = list()
-    ant = list()
+    syn_list = list()
+    ant_list = list()
     for syn_set in wn.synsets(word_input):
-       for lemma in syn_set.lemmas():
-            syn.append(lemma.name())
+        for lemma in syn_set.lemmas():
+            syn_list.append(lemma.name())
             if lemma.antonyms():
-                ant.append(lemma.antonyms()[0].name())
-    print('Synonyms: ' + str(syn))
-    return syn
+                ant_list.append(lemma.antonyms()[0].name())
+    print('Synonyms: ' + str(syn_list))
+    return syn_list
 
 
-def cal_sim(syn, model, word_input):
+def cal_sim(syn_list, model, word_input):
     syn_sim_list = list()
-    for syn in syn:
+    for synonyms in syn_list:
         try:
-            syn_sim = model.n_similarity(word_input, str(syn))
+            syn_sim = model.n_similarity(word_input, str(synonyms))
             syn_sim_list.append(syn_sim)
-            print(syn, syn_sim)
+            print(synonyms, syn_sim)
         except KeyError:
-            print ("one word not in vocabulary: ", syn)
+            print("one word not in vocabulary: ", syn)
             syn_sim = 0
             syn_sim_list.append(syn_sim)
-            print(syn, syn_sim)
+            print(synonyms, syn_sim)
     return syn_sim_list
 
 
@@ -93,8 +93,8 @@ def get_top_k(syn2, syn_sim2, k):
     return syn_top_k, syn_sim_top_k
 
 
-def duplicate_remove(syn, word_input):
-    syn1 = list(set(syn))
+def duplicate_remove(syn_list, word_input):
+    syn1 = list(set(syn_list))
     syn2 = syn1
     syn2.remove(word_input)
     return syn2
@@ -102,9 +102,12 @@ def duplicate_remove(syn, word_input):
 
 def syn(word_input, k):
     model = model_w2v()
-    syn = query_synset(word_input)
-    syn2 = duplicate_remove(syn, word_input)
+    syn_list = query_synset(word_input)
+    syn2 = duplicate_remove(syn_list, word_input)
     syn_sim2 = cal_sim(syn2, model, word_input)
     print(syn_sim2)
     syn_top_k, syn_sim_top_k = get_top_k(syn2, syn_sim2, k)
-    return syn_top_k, syn_sim_top_k
+    syn_top_k_with_sim = {}
+    for i in range(len(syn_top_k)):
+        syn_top_k_with_sim[syn_top_k[i]] = syn_top_k_with_sim[i]
+    return syn_top_k_with_sim

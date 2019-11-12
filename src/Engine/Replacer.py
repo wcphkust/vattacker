@@ -2,7 +2,8 @@ import random
 import math
 import nltk
 from nltk.parse import CoreNLPParser
-from nltk.corpus import wordnet   #Import wordnet from the NLTK
+from nltk.corpus import wordnet
+from Utils.synonyms import *
 
 
 class Replacer(object):
@@ -27,20 +28,11 @@ class Replacer(object):
             for subsubtree in subsubtrees:
                 if subsubtree._label in ['JJ', 'RB']:
                     word = subsubtree.__getitem__(0)
-                    print("word")
-                    print(word)
-                    candidates = wordnet.synsets(word)
-                    syn = []
-                    for candidate in candidates:
-                        for lemma in candidate.lemmas():
-                            syn.append(lemma.name())
-                    syn_set = set(syn)
-                    if word in syn_set:
-                        syn_set.remove(word)
-                    syn = list(syn_set)
-                    if not syn:
+                    candidates_with_sim = syn(word, 5)
+                    candidates = set(candidates_with_sim.keys())
+                    if not candidates:
                         continue
-                    new_word = random.choice(syn)
+                    new_word = max(candidates_with_sim, key=lambda s: candidates_with_sim[s])
                     subsubtree.__setitem__(0, new_word)
         return " ".join(self.syntax_tree.leaves())
 

@@ -1,4 +1,3 @@
-from Engine.SentimentIntensityAnalyzer import *
 from Engine.FuzzAttacker import *
 from Engine.Tagger import *
 from copy import deepcopy

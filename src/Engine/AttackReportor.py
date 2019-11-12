@@ -1,4 +1,3 @@
-from Engine.SentimentIntensityAnalyzer import *
 from textblob import TextBlob
 
 class AttackReportor(object):

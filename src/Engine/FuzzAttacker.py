@@ -2,6 +2,7 @@ from copy import deepcopy
 from Engine.TextMutator import *
 from Engine.AttackReportor import *
 
+
 class FuzzAttacker(object):
     """
     The core engine of vattacker
