@@ -96,7 +96,8 @@ def get_top_k(syn2, syn_sim2, k):
 def duplicate_remove(syn_list, word_input):
     syn1 = list(set(syn_list))
     syn2 = syn1
-    syn2.remove(word_input)
+    if word_input in syn_list:
+        syn2.remove(word_input)
     return syn2
 
 
