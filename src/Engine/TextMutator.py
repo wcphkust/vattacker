@@ -3,10 +3,10 @@ from math import floor
 from itertools import groupby
 import nltk
 import numpy as np
-import pandas as pd
 from Engine.Tagger import *
 from Engine.Parser import *
 from Engine.Replacer import *
+from Utils.setting import BOOSTER_DICT
 
 
 class TextMutator(object):
@@ -114,7 +114,7 @@ class TextMutator(object):
         seed = self.select_best_seed()
         tagger = Tagger(seed)
         pos_tag = tagger.pos_tagging()
-        new_pos_tag = [(token, tag) for (token, tag) in pos_tag if tag != "RB"]
+        new_pos_tag = [(token, tag) for (token, tag) in pos_tag if (tag != "RB" or token not in BOOSTER_DICT)]
         tokens = [token for (token, tag) in new_pos_tag]
         new_text = " ".join(tokens)
         return new_text
