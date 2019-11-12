@@ -109,5 +109,5 @@ def syn(word_input, k):
     syn_top_k, syn_sim_top_k = get_top_k(syn2, syn_sim2, k)
     syn_top_k_with_sim = {}
     for i in range(len(syn_top_k)):
-        syn_top_k_with_sim[syn_top_k[i]] = syn_top_k_with_sim[i]
+        syn_top_k_with_sim[syn_top_k[i]] = syn_sim_top_k[i]
     return syn_top_k_with_sim
