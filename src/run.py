@@ -19,10 +19,6 @@ if __name__ == '__main__':
     if "-random" in sys.argv:
         is_nonrandom_mutation = False
     if "-single" in sys.argv:
-        print(tool)
-        print(text)
-        print(is_nonrandom_mutation)
-        print(max_attack_num)
         single_test = SingleTest(tool, text, is_nonrandom_mutation, True, int(max_attack_num))
     elif "-batch" in sys.argv:
         filepath = os.path.normpath(os.path.join(os.getcwd(), "../../../vattacker_data/"))
