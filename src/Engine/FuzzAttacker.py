@@ -46,7 +46,7 @@ class FuzzAttacker(object):
                 print(str(ar.polarity))
                 print(str(ar.result))
                 print("-----------------------------------------------------------------")
-            if abs(ar.result.polarity) < abs(prear.result.polarity):
+            if abs(ar.result) < abs(prear.result):
                 mutator_weight[text_mutator.mutator_strategy] += 1
             if ar.polarity != prear.polarity:
                 self.success_attack = deepcopy(ar)
