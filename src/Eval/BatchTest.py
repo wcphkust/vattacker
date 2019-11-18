@@ -23,7 +23,7 @@ class BatchTest(object):
         self.test()
         self.success = len(self.success_attack)
         self.fail = len(self.failed_attack)
-        self.test_result_filepath = os.path.normpath(self.test_root + "/result/" + self.test_id)
+        self.test_result_filepath = os.path.normpath(self.test_root + "/result/" + self.tool + "_" + self.test_id)
         export_success_attack(self.test_result_filepath, self.success_result)
 
     def test(self):
