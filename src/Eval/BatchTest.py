@@ -8,7 +8,8 @@ class BatchTest(object):
     test on a testing dataset
     """
 
-    def __init__(self, test_root, test_id, is_nonrandom_mutation, max_attack_num=5):
+    def __init__(self, tool, test_root, test_id, is_nonrandom_mutation, max_attack_num=5):
+        self.tool = tool
         self.test_root = test_root
         self.test_id = test_id
         self.test_filepath = os.path.normpath(self.test_root + "/test/" + self.test_id)
@@ -31,7 +32,7 @@ class BatchTest(object):
         """
         attack_num = 0
         for text in self.texts:
-            single_test = SingleTest(text, self.is_nonrandom_mutation, False, self.max_attack_num)
+            single_test = SingleTest(self.tool, text, self.is_nonrandom_mutation, False, self.max_attack_num)
             if single_test.successful_attack is not None:
                 self.success_attack.append([deepcopy(single_test.mutation_history),
                                             deepcopy(single_test.successful_attack)])

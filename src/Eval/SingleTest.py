@@ -8,7 +8,8 @@ class SingleTest(object):
     test single sentence or short paragraph
     """
 
-    def __init__(self, text, is_nonrandom_mutation=True, is_print=True, max_attack_num=5):
+    def __init__(self, tool, text, is_nonrandom_mutation=True, is_print=True, max_attack_num=5):
+        self.tool = tool
         self.is_nonrandom_mutation = is_nonrandom_mutation
         self.is_print = is_print
         self.text = deepcopy(text)
