@@ -19,5 +19,5 @@ class SingleTest(object):
 
     def test(self):
         # TODO
-        fuzz_attacker = FuzzAttacker(self.text, self.is_nonrandom_mutation, self.is_print, self.max_attack_num)
+        fuzz_attacker = FuzzAttacker(self.tool, self.text, self.is_nonrandom_mutation, self.is_print, self.max_attack_num)
         return fuzz_attacker.mutation_history, fuzz_attacker.success_attack
