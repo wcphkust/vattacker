@@ -22,6 +22,8 @@ class AttackReportor(object):
         """
         sentiment_result = None
         polarity = None
+        print(self.text)
+        print(self.tool)
         if self.text is None or self.tool is None:
             return sentiment_result, polarity
         if self.tool == "vader":
@@ -29,6 +31,10 @@ class AttackReportor(object):
             score = vader_sa.polarity_scores(self.text)
             polarity = max(score, key=lambda s: score[s])
             sentiment_result = score[polarity]
+            print("polarity")
+            print(polarity)
+            print("result")
+            print(sentiment_result)
         elif self.tool == "textblob":
             testimonial = TextBlob(self.text)
             sentiment_result = testimonial.sentiment.polarity
