@@ -12,7 +12,7 @@ if __name__ == '__main__':
         tool = sys.argv[sys.argv.index("-tool") + 1]
     if "-text" in sys.argv:
         text = sys.argv[sys.argv.index("-text") + 1]
-    if "-textid" in sys.argv:
+    if "-testid" in sys.argv:
         test_id = sys.argv[sys.argv.index("-testid") + 1]
     if "-max" in sys.argv:
         max_attack_num = sys.argv[sys.argv.index("-max") + 1]
