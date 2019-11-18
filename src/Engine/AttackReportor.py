@@ -24,8 +24,8 @@ class AttackReportor(object):
         polarity = None
         print(self.text)
         print(self.tool)
-        if self.text is None or self.tool is None:
-            return sentiment_result, polarity
+        # if self.text is None or self.tool is None:
+        #     return sentiment_result, polarity
         if self.tool == "vader":
             vader_sa = SentimentIntensityAnalyzer()
             score = vader_sa.polarity_scores(self.text)
