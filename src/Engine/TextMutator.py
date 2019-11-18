@@ -32,6 +32,8 @@ class TextMutator(object):
     def select_best_seed(self):
         original_reportor = self.mutate_history[0]
         original_result, original_polarity = original_reportor.fetch_report()
+        print(original_result)
+        print(original_polarity)
         best_seed = original_reportor.text
         min_polarity = original_result
         for mutation_reportor in self.mutate_history:
