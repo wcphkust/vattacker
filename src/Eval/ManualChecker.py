@@ -39,6 +39,7 @@ class ManualChecker(object):
             print("C: illegal grammar")
             print("D: Others")
             print("-----------------------------------------------------------")
+            i += 1
 
             while True:
                 item_type = input()
