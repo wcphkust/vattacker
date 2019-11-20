@@ -20,7 +20,11 @@ class ManualChecker(object):
         :return: adversarial result with manual-labeled types
         """
         check_result = []
-        for item in self.adversarial_result:
+        if len(self.adversarial_result) > 300:
+            adversarial_result = self.adversarial_result[:300]
+        else:
+            adversarial_result = self.adversarial_result
+        for item in adversarial_result:
             new_item = {"original_text": item["original_text"], "adversarial_text": item["adversarial_text"]}
 
             print("-----------------------------------------------------------")
